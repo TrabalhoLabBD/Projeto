@@ -2,24 +2,8 @@ CREATE DATABASE hospital;
 
 USE hospital;
 
-CREATE TABLE plano_de_saude (
-    id_pds INT PRIMARY KEY AUTO_INCREMENT,
-    nome_pds VARCHAR(50) NOT NULL,
-    categoria_pds VARCHAR(11) NOT NULL,
-    valor_pds FLOAT(5) NOT NULL,
-    cobertura_pds VARCHAR(8) NOT NULL,
-    classificacao_pds ENUM('básico', 'normal', 'premium'),
-    CHECK (categoria_pds = 'individual'
-        OR categoria_pds = 'familiar'
-        OR categoria_pds = 'empresarial'),
-    CHECK (valor_pds >= 0),
-    CHECK (cobertura_pds = 'nacional'
-        OR cobertura_pds = 'estadual')
-);
-
 CREATE TABLE paciente (
-    id_pac INT PRIMARY KEY AUTO_INCREMENT,
-    id_pds INT UNIQUE,
+    id_pac INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     nome_pac VARCHAR(100) NOT NULL,
     cpf_pac INT(11) NOT NULL UNIQUE,
     idade_pac INT(3) NOT NULL,
@@ -31,46 +15,85 @@ CREATE TABLE paciente (
         OR sexo_pac = 'feminino'
         OR sexo_pac = 'outro'),
     CHECK (altura_pac > 0 AND altura_pac < 3),
-    CHECK (peso_pac > 0 AND peso_pac < 600),
-    CONSTRAINT FK_PACIENTE FOREIGN KEY (id_pds) REFERENCES plano_de_saude (id_pds)
+    CHECK (peso_pac > 0 AND peso_pac < 600)
 );
 
--- arrumar a fk
+CREATE TABLE plano_de_saude (
+    id_pds INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    id_pds_pac INT NOT NULL UNIQUE,
+    nome_pds VARCHAR(50) NOT NULL,
+    categoria_pds VARCHAR(11) NOT NULL,
+    valor_pds FLOAT(5) NOT NULL,
+    cobertura_pds VARCHAR(8) NOT NULL,
+    classificacao_pds ENUM('básico', 'normal', 'premium'),
+    CHECK (categoria_pds = 'individual'
+        OR categoria_pds = 'familiar'
+        OR categoria_pds = 'empresarial'),
+    CHECK (valor_pds >= 0),
+    CHECK (cobertura_pds = 'nacional'
+        OR cobertura_pds = 'estadual'),
+    CONSTRAINT FOREIGN KEY (id_pds_pac)
+        REFERENCES paciente (id_pac)
+)
 
-CREATE TABLE atendimento(
-    id_atd int(10),
-    nome_atd varchar(100) NOT NULL,
-    tipo_atd varchar(100) NOT NULL,
-    PRIMARY KEY (id_atd)
-);
-
-CREATE TABLE financeiro(
-    conv_acc varchar(500),
-    conv_pac varchar(100),
-    PRIMARY KEY(conv_pac)
-);
-
+CREATE TABLE atendimento (
+    id_atd INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nome_atd VARCHAR(100) NOT NULL,
+    classe_atd ENUM('vermelho', 'laranja', 'amarelo', 'verde', 'azul') NOT NULL,
+    ala_atd VARCHAR(30) NOT NULL
+)
 
 CREATE TABLE medico (
-    nome_med varchar(100) NOT NULL,
-    crm_med int(9),
-    especializacao_med varchar(30) NOT NULL,
-    ala_med varchar(30) NOT NULL,
-    PRIMARY KEY(crm_med)
+    id_med INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nome_med VARCHAR(100) NOT NULL,
+    crm_med INT(9) UNIQUE NOT NULL,
+    especializacao_med VARCHAR(30) NOT NULL,
+    id_med_atd INT UNIQUE NOT NULL,
+    CONSTRAINT FOREIGN KEY (id_med_atd)
+        REFERENCES atendimento (id_atd)
+)
+
+CREATE TABLE enfermeiro (
+    id_enf INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nome_enf VARCHAR(100) NOT NULL,
+    coren_enf INT(9) UNIQUE NOT NULL,
+    especializacao_enf VARCHAR(30) DEFAULT 'Sem especialização' NOT NULL,
+    id_enf_atd INT UNIQUE NOT NULL,
+    CONSTRAINT FOREIGN KEY (id_enf_atd)
+        REFERENCES atendimento (id_atd)
+)
+
+CREATE TABLE equipamento (
+    id_eqp INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nome_eqp VARCHAR(50) NOT NULL,
+    classe_eqp VARCHAR(20) NOT NULL
+    CHECK (classe_eqp = 'diagnostico'
+        OR classe_eqp = 'tratamento'
+        OR classe_eqp = 'suporte a vida'
+        OR classe_eqp = 'medico duravel')
 );
 
-CREATE TABLE enfermeiro(
-    nome_enf varchar(100) NOT NULL,
-    coren_enf int(9),
-    ala_enf varchar(30) NOT NULL,
-    PRIMARY KEY(coren_enf)
+CREATE TABLE financeiro (
+    id_fin INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    validade_plano BOOL NOT NULL,
+    valor_atendimento FLOAT NOT NULL,
+    gastos_atendimento FLOAT NOT NULL,
+    CHECK (valor_atendimento >= 0),
+    CHECK (gastos_atendimento >= 0)
 );
 
-CREATE TABLE estoque(
-    id_est int(4),
-    nome_est varchar(50) NOT NULL,
-    categoria_est varchar(30) NOT NULL,
-    quantidade_est int NOT NULL,
-    preco_prod float NOT NULL,
-    PRIMARY KEY(id_est)
+CREATE TABLE administrativo (
+    id_adm INT PRIMARY KEY NOT NULL,
+    id_adm_fin INT UNIQUE NOT NULL,
+    id_adm_eqp INT UNIQUE NOT NULL,
+    id_adm_atd INT UNIQUE NOT NULL,
+    id_adm_pac INT UNIQUE NOT NULL,
+    CONSTRAINT FOREIGN KEY (id_adm_fin)
+        REFERENCES financeiro (id_fin),
+    CONSTRAINT FOREIGN KEY (id_adm_eqp)
+        REFERENCES equipamento (id_eqp),
+    CONSTRAINT FOREIGN KEY (id_adm_atd)
+        REFERENCES atendimento (id_atd),
+    CONSTRAINT FOREIGN KEY (id_adm_pac)
+        REFERENCES paciente (id_pac)
 );
