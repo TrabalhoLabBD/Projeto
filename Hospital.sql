@@ -25,7 +25,7 @@ CREATE TABLE plano_de_saude (
     categoria_pds VARCHAR(11) NOT NULL,
     valor_pds FLOAT(5) NOT NULL,
     cobertura_pds VARCHAR(8) NOT NULL,
-    classificacao_pds ENUM('básico', 'normal', 'premium'),
+    classificacao_pds ENUM('básico', 'normal', 'premium') NOT NULL	,
     CHECK (categoria_pds = 'individual'
         OR categoria_pds = 'familiar'
         OR categoria_pds = 'empresarial'),
@@ -34,14 +34,14 @@ CREATE TABLE plano_de_saude (
         OR cobertura_pds = 'estadual'),
     CONSTRAINT FOREIGN KEY (id_pds_pac)
         REFERENCES paciente (id_pac)
-)
+);
 
 CREATE TABLE atendimento (
     id_atd INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     nome_atd VARCHAR(100) NOT NULL,
     classe_atd ENUM('vermelho', 'laranja', 'amarelo', 'verde', 'azul') NOT NULL,
     ala_atd VARCHAR(30) NOT NULL
-)
+);
 
 CREATE TABLE medico (
     id_med INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE medico (
     id_med_atd INT UNIQUE NOT NULL,
     CONSTRAINT FOREIGN KEY (id_med_atd)
         REFERENCES atendimento (id_atd)
-)
+);
 
 CREATE TABLE enfermeiro (
     id_enf INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE enfermeiro (
     id_enf_atd INT UNIQUE NOT NULL,
     CONSTRAINT FOREIGN KEY (id_enf_atd)
         REFERENCES atendimento (id_atd)
-)
+);
 
 CREATE TABLE equipamento (
     id_eqp INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE financeiro (
 );
 
 CREATE TABLE administrativo (
-    id_adm INT PRIMARY KEY NOT NULL,
+    id_adm INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     id_adm_fin INT UNIQUE NOT NULL,
     id_adm_eqp INT UNIQUE NOT NULL,
     id_adm_atd INT UNIQUE NOT NULL,
