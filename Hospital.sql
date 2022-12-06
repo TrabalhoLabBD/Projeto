@@ -121,15 +121,29 @@ INSERT INTO equipamento VALUES (5, "eletrocardiogrago", "diagnostico");
 INSERT INTO atendimento VALUES (1, "Traumatismo crâniano", "vermelho", "ALA 1");
 INSERT INTO atendimento VALUES (2, "torção no tornoselo", "verde", "ALA 2");
 INSERT INTO atendimento VALUES (3, "Dor de cabeça", "verde", "ALA 3");
+INSERT INTO atendimento VALUES (4,"Falta de ar","vermelho","ALA 1");
+INSERT INTO atendimento VALUES (5,"Dores no peito","amarelo","ALA 2");
+INSERT INTO atendimento VALUES (6,"Fratura mo pé","verde","ALA 2");
+INSERT INTO atendimento VALUES (7,"Desmaio repentino","azul","ALA 3");
+INSERT INTO atendimento VALUES (8,"Náusea e tontira","azul","ALA 3");
 
 INSERT INTO enfermeiro VALUES (1,"Natasha",422124322, "",1);
 INSERT INTO enfermeiro VALUES (2,"Sasha",123342212,"" ,3);
 INSERT INTO enfermeiro VALUES (3,"Jennifer",324322324,"",2);
+INSERT INTO enfermeiro VALUES (3,"João",458852365,"",5);
+INSERT INTO enfermeiro VALUES (3,"Fernando",236858741,"",4);
 
 INSERT INTO plano_de_saude VALUES (1,5,"VIDA",,,,);
 INSERT INTO plano_de_saude VALUES (2,4,"LIFE",,,,);
 INSERT INTO plano_de_saude VALUES (3,3,,,,,);
 INSERT INTO plano_de_saude VALUES (4,2,,,,,);
 INSERT INTO plano_de_saude VALUES (5,1,,,,,);
+
+INSERT INTO administrativo VALUES (1,2,3,4,5); 
+INSERT INTO administrativo VALUES (2,4,5,1,3);
+INSERT INTO administrativo VALUES (4,5,2,1,3);
+INSERT INTO administrativo VALUES (1,2,4,5,1);
+
+
 
 SELECT * from paciente;	
