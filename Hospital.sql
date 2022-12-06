@@ -133,17 +133,25 @@ INSERT INTO enfermeiro VALUES (3,"Jennifer",324322324,"",2);
 INSERT INTO enfermeiro VALUES (3,"João",458852365,"",5);
 INSERT INTO enfermeiro VALUES (3,"Fernando",236858741,"",4);
 
-INSERT INTO plano_de_saude VALUES (1,5,"VIDA",,,,);
-INSERT INTO plano_de_saude VALUES (2,4,"LIFE",,,,);
-INSERT INTO plano_de_saude VALUES (3,3,,,,,);
-INSERT INTO plano_de_saude VALUES (4,2,,,,,);
-INSERT INTO plano_de_saude VALUES (5,1,,,,,);
+INSERT INTO plano_de_saude VALUES (1,5,"VIDA","familiar",500.00,"nacional","premium");
+INSERT INTO plano_de_saude VALUES (2,1,"LIFE","individual",320.50,"estadual","premium");
+INSERT INTO plano_de_saude VALUES (3,6,"Happ","empresarial",200.00,"estadual","basico");
+INSERT INTO plano_de_saude VALUES (4,2,"SAVE","empresarial",900,"estadual","premium");
+INSERT INTO plano_de_saude VALUES (5,3,"saveLife","individual",90,"nacional","basico");
 
 INSERT INTO administrativo VALUES (1,2,3,4,5); 
 INSERT INTO administrativo VALUES (2,4,5,1,3);
-INSERT INTO administrativo VALUES (4,5,2,1,3);
-INSERT INTO administrativo VALUES (1,2,4,5,1);
+INSERT INTO administrativo VALUES (3,1,4,5,2);
+INSERT INTO administrativo VALUES (4,3,1,2,6);
 
+INSERT INTO medico VALUES (1,"Ronaldo",1,"Neurologista",1);
+INSERT INTO medico VALUES (2,"Fabio",2,"Urologista",2);
+INSERT INTO medico VALUES (3,"Adriana",3,"Geral",3);
+INSERT INTO medico VALUES (4,"Marcos",4,"Psiquiatra",4);
+INSERT INTO medico VALUES (5,"Chaves",5,"Psicologo",5);
 
 
 SELECT * from paciente;	
+SELECT * from administrativo;
+SELECT * FROM medico;
+SELECT * FROM atendimento;
