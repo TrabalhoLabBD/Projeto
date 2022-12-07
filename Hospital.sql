@@ -151,8 +151,62 @@ INSERT INTO administrativo VALUES (0,4,5,1,3);
 INSERT INTO administrativo VALUES (0,1,4,5,2);
 INSERT INTO administrativo VALUES (0,3,1,2,6);
 
+-- OPERAÇÕES 
 
-SELECT * from paciente;	
+-- SELECT GENÉRICO
+
 SELECT * from administrativo;
-SELECT * FROM medico;
-SELECT * FROM atendimento;
+SELECT * from atendimento;
+SELECT * from enfermeiro;
+SELECT * from equipamento;
+SELECT * from financeiro;
+SELECT * from medico;
+SELECT * from paciente;
+SELECT * from plano_de_saude;
+
+-- MOSTRA O NOME DO ATENDIMENTO, PACIENTE, ENFERMEIRO E MÉDICO QUE REALIZARAM O ATENDIMENTO
+  
+SELECT 
+    atd.nome_atd AS atendimento,
+    pac.nome_pac AS paciente,
+    enf.nome_enf AS enfermeiro,
+    med.nome_med AS médico
+FROM
+    administrativo AS adm
+        INNER JOIN
+    atendimento AS atd ON adm.id_adm_atd = atd.id_atd
+        INNER JOIN
+    paciente AS pac ON pac.id_pac = adm.id_adm_pac
+        INNER JOIN
+    enfermeiro AS enf ON enf.id_enf_atd = atd.id_atd
+        INNER JOIN
+    medico AS med ON med.id_med_atd = atd.id_atd;
+    
+-- MOSTRA O NOME DO PACIENTE, O NOME DO PLANO DE SAÚDE E A VALIDADE DO PLANO
+
+SELECT 
+    pac.nome_pac AS paciente,
+    pds.nome_pds AS 'plano de saúde',
+    fin.validade_plano AS validade
+FROM
+    administrativo AS adm
+        INNER JOIN
+    financeiro AS fin ON fin.id_fin = adm.id_adm_fin
+        INNER JOIN
+    paciente AS pac ON pac.id_pac = adm.id_adm_pac
+        INNER JOIN
+    plano_de_saude AS pds ON pds.id_pds_pac = pac.id_pac;
+
+-- MOSTRA AS ALAS DOS ENFERMEIROS E MÉDICOS
+
+SELECT 
+    atd.ala_atd AS Ala,
+    enf.nome_enf AS enfermeiro,
+    med.nome_med AS médico
+FROM
+    atendimento AS atd
+        INNER JOIN
+    enfermeiro AS enf ON enf.id_enf_atd = atd.id_atd
+        INNER JOIN
+    medico AS med ON med.id_med_atd = atd.id_atd;
+    
